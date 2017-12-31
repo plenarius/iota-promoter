@@ -81,7 +81,7 @@ window.iotaTransactionSpammer = (function(){
     let averageConfirmationDuration = 0 // milliseconds
 
     function getNextErrorCooldown() {
-        return globalErrorCooldown *= (1.5 + 0.5 * Math.random()) // backoff algorithm
+        return Math.min(globalErrorCooldown *= (1.5 + 0.5 * Math.random()), 30) // backoff algorithm
     }
 
     let confirmationTimes = []
