@@ -15,7 +15,7 @@ window.iotaTransactionSpammer = (function(){
     // TODO: use this for listening to changes in options and emit change to eventEmitter
     const optionsProxy = new Proxy({
         isLoadBalancing: true, // change node after every PoW
-        doRemotePOW: true
+        doRemotePOW: false
     }, {
         set: (obj, prop, value) => {
             obj[prop] = value
