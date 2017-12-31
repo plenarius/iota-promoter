@@ -14,7 +14,8 @@ window.iotaTransactionSpammer = (function(){
 
     // TODO: use this for listening to changes in options and emit change to eventEmitter
     const optionsProxy = new Proxy({
-        isLoadBalancing: true // change node after every PoW
+        isLoadBalancing: true, // change node after every PoW
+        doRemotePOW: true
     }, {
         set: (obj, prop, value) => {
             obj[prop] = value
@@ -235,8 +236,9 @@ window.iotaTransactionSpammer = (function(){
         iota = new iotaLib({'provider': getCurrentProvider()})
 
 
-
-        iota.api.attachToTangle = localAttachToTangle
+        if(!optionsProxy.doRemotePOW) {
+          iota.api.attachToTangle = localAttachToTangle
+        }
     }
 
     function sendMessages() {        
@@ -546,8 +548,12 @@ window.iotaTransactionSpammer = (function(){
                     message: message,
                     tag: tag,
                     numberOfTransfersInBundle: numberOfTransfersInBundle,
-                    isLoadBalancing: optionsProxy.isLoadBalancing
+                    isLoadBalancing: optionsProxy.isLoadBalancing,
+                    doRemotePOW: optionsProxy.doRemotePOW
                 }
+            }
+            if(params.hasOwnProperty("doRemotePOW")) {
+                optionsProxy.doRemotePOW = params.doRemotePOW
             }
             if(params.hasOwnProperty("provider")) {
                 _currentProvider = params.provider

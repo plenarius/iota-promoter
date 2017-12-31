@@ -70,6 +70,7 @@ $(function(){
     })
 
     $('#loadBalanceCheckbox').prop('checked', iotaTransactionSpammer.options().isLoadBalancing)
+    $('#doRemotePOWCheckbox').prop('checked', iotaTransactionSpammer.options().doRemotePOW)
 
     iotaTransactionSpammer.startSpamming()
 
@@ -109,7 +110,8 @@ $(function(){
     $('#settingsModal').on('hidden.bs.modal', function() {
         iotaTransactionSpammer.options({
             customProvider: $('#customHost')[0].value,
-            isLoadBalancing: $('#loadBalanceCheckbox').is(':checked')
+            isLoadBalancing: $('#loadBalanceCheckbox').is(':checked'),
+            doRemotePOW: $('#doRemotePOWCheckbox').is(':checked')
         })
     })
 
