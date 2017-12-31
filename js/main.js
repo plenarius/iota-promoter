@@ -51,6 +51,18 @@ $(function(){
         $('#averageConfirmationDuration')[0].innerText = (averageConfirmationDuration / 1000).toFixed(significantFigures)
     })
 
+    iotaTransactionSpammer.eventEmitter.on('tipsCountChanged', function(tipsCount) {
+        $('#tipsCount')[0].innerText = tipsCount
+    })
+
+    iotaTransactionSpammer.eventEmitter.on('processedCountChanged', function(processedCount) {
+        $('#processedCount')[0].innerText = processedCount
+    })
+
+    iotaTransactionSpammer.eventEmitter.on('rejectedCountChanged', function(zeroValueCount,tooNewCount,unpromotableCount) {
+        $('#rejectedCount')[0].innerText = zeroValueCount + "/" + tooNewCount + "/" + unpromotableCount
+    })
+
     iotaTransactionSpammer.eventEmitter.on('transactionCompleted', function(success) {
         const thetangleorgBaseURL = 'https://thetangle.org/transaction/'
         const thetangleorgURL = `${thetangleorgBaseURL}${success}`

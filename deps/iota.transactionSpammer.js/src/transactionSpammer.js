@@ -65,6 +65,10 @@ window.iotaTransactionSpammer = (function(){
 
     let transactionCount = 0
     let confirmationCount = 0
+    let unpromotableCount = 0
+    let processedCount = 0
+    let tooNewCount = 0
+    let zeroValueCount = 0
     let averageConfirmationDuration = 0 // milliseconds
 
     function getNextErrorCooldown() {
@@ -262,13 +266,23 @@ window.iotaTransactionSpammer = (function(){
         var tip
         var value = 0
         var transactionAge = 0
+        eventEmitter.emitEvent('processedCountChanged', [processedCount]) 
         while(value < 1 || transactionAge < reattachTimeThreshold){
+            processedCount++
             if(tipTransactions.length == 0){
                 populateTips()
                 return
             }
             tip = tipTransactions.pop()
             value = tip.value
+            if (value < 1) {
+                zeroValueCount++
+                eventEmitter.emitEvent('rejectedCountChanged', [zeroValueCount,tooNewCount,unpromotableCount])
+            }
+            if (value > 0 && transactionAge < promoteTimeThreshold) {
+                tooNewCount++
+                eventEmitter.emitEvent('rejectedCountChanged', [zeroValueCount,tooNewCount,unpromotableCount])
+            }
             timestamp = tip.timestamp
             if (timestamp<1262304000000) {
                 timestamp = timestamp * 1000
@@ -276,6 +290,7 @@ window.iotaTransactionSpammer = (function(){
             
             transactionAge = (Date.now() - timestamp)/(60*1000) 
         }     
+        eventEmitter.emitEvent('processedCountChanged', [processedCount]) 
         iota.api.getBundle(tip.hash,function(error,bundle){
             if(error){
                 findReattachableTransaction(tips)
@@ -312,7 +327,8 @@ window.iotaTransactionSpammer = (function(){
                         eventEmitter.emitEvent('state', ['Valid promotable transaction, promoting, patience please.'])
                         reattachTransaction(bundle)
                       } else { // Categorize transactions that need to be reattached
-                        eventEmitter.emitEvent('state', ['Not promotable.'])
+                unpromotableCount++
+                eventEmitter.emitEvent('rejectedCountChanged', [zeroValueCount,tooNewCount,unpromotableCount])
                         findReattachableTransaction()
                       }
                     })
@@ -336,6 +352,8 @@ window.iotaTransactionSpammer = (function(){
         var params = { interrupt, delay: 1000 };
         iota.api.promoteTransaction(bundle[0].hash,3,14,[transfer],params,function(error, success){
             if(error){
+                unpromotableCount++
+                eventEmitter.emitEvent('rejectedCountChanged', [zeroValueCount,tooNewCount,unpromotableCount])
                 eventEmitter.emitEvent('state', [`Error promoting transaction ${tailtx}`])   
                 checkIfNodeIsSynced()
                 return
@@ -412,9 +430,11 @@ window.iotaTransactionSpammer = (function(){
     
     function getTipTransactionObjects(){
         var tipSlice
+        var tipLength = tips.length
         var done = false
         if((tipIndex + tipBatchSize) > tips.length){
             tipSlice = tips.slice(tipIndex,tips.length)
+            eventEmitter.emitEvent('tipsCountChanged', [tipLength])
             done = true
         }
         else{
@@ -430,6 +450,7 @@ window.iotaTransactionSpammer = (function(){
             }
             tipIndex += tipBatchSize
             if(!done){
+                eventEmitter.emitEvent('tipsCountChanged', [tipIndex])
                 setTimeout(getTipTransactionObjects,100)
             }
             else{
