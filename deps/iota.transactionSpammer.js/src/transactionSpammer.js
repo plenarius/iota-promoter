@@ -357,8 +357,7 @@ window.iotaTransactionSpammer = (function(){
                 unpromotableCount++
                 eventEmitter.emitEvent('rejectedCountChanged', [zeroValueCount,tooNewCount,unpromotableCount])
                 eventEmitter.emitEvent('state', [`Error promoting transaction ${tailtx}`])   
-                checkIfNodeIsSynced()
-                return
+                return changeProviderAndSync()
             }
             transactionCount  += 1
             eventEmitter.emitEvent('state', ['Transaction promoted successfully.'])
