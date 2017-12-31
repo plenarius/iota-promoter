@@ -263,7 +263,12 @@ window.iotaTransactionSpammer = (function(){
      
     function timeToLive (origin, TTL) {
       return TTL - (Date.now() - origin.attachmentTimestamp)
-    }    
+    }  
+    
+    function round(value, decimals) {
+      return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+    }  
+    
     function findReattachableTransaction(){
         var tip
         var value = 0
@@ -290,8 +295,8 @@ window.iotaTransactionSpammer = (function(){
                 timestamp = timestamp * 1000
             }
             
-            transactionAge = (Date.now() - timestamp)/(60*1000) 
-        }     
+            transactionAge = round((Date.now() - timestamp)/(60*1000),1)
+        }    
         eventEmitter.emitEvent('processedCountChanged', [processedCount]) 
         iota.api.getBundle(tip.hash,function(error,bundle){
             if(error){
