@@ -41,6 +41,14 @@ window.iotaTransactionSpammer = (function(){
     ]
 
     const httpsProviders = [
+        "https://iota.wiremore.io:443",
+        "https://nodes.iota.cafe:443",
+        "https://iotanode.us:443",
+        "https://durian.iotasalad.org:14265",
+        "https://peanut.iotasalad.org:14265",
+        "https://potato.iotasalad.org:14265",
+        "https://iri2-api.iota.fm:443",
+        "https://iri3-api.iota.fm:443",
     ]
 
     const validProviders = getValidProviders()
