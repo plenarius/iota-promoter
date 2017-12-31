@@ -305,41 +305,18 @@ window.iotaTransactionSpammer = (function(){
                 }
             }
             eventEmitter.emitEvent('state', [`Non-zero value transaction found! Transaction has been pending for ${transactionAge} minutes!`]) 
-            eventEmitter.emitEvent('state', ['Checking if transaction is reattachable first...'])
-            iota.api.isReattachable(inputs,function(error,reattachable){
-                if (error){
-                    eventEmitter.emitEvent('state', ['Error checking if transaction is reattachable'])
-                    checkIfNodeIsSynced()
-                    return
-                }
-                if (typeof(reattachable) == 'object'){
-                    var temp = true
-                    for(var i=0; i<reattachable.length; i++){
-                        if(!reattachable[i]) {
-                            temp = false
-                        }
-                    }
-                    reattachable = temp
-                }
-                if (reattachable){
-                    var tailtx = bundle[0].hash;
-                    eventEmitter.emitEvent('state', ['Transaction reattachable, checking if promotable now.'])
-                    iota.api.isPromotable(bundle[0].hash).then(state => {
-                      if (state) {
-                        eventEmitter.emitEvent('state', ['Valid promotable transaction, promoting, patience please.'])
-                        reattachTransaction(bundle)
-                      } else { // Categorize transactions that need to be reattached
+            eventEmitter.emitEvent('state', [`Checking if transaction is promotable (${tip.hash}) first...`])
+            iota.api.isPromotable(bundle[0].hash).then(state => {
+              if (state) {
+                eventEmitter.emitEvent('state', ['Valid promotable transaction, promoting, patience please.'])
+                reattachTransaction(bundle)
+              } else { // Categorize transactions that need to be reattached
                 unpromotableCount++
                 eventEmitter.emitEvent('rejectedCountChanged', [zeroValueCount,tooNewCount,unpromotableCount])
-                        findReattachableTransaction()
-                      }
-                    })
-                }
-                else{
-                    eventEmitter.emitEvent('state', ['Not promotable.'])
-                    findReattachableTransaction()
-                }
-            })  
+                eventEmitter.emitEvent('state', ['Not promotable.'])
+                findReattachableTransaction()
+              }
+            })
         })        
     }
     
