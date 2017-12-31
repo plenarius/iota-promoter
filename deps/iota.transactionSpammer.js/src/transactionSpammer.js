@@ -434,8 +434,8 @@ window.iotaTransactionSpammer = (function(){
         var tipSlice
         var tipLength = tips.length
         var done = false
-        if((tipIndex + tipBatchSize) > tips.length){
-            tipSlice = tips.slice(tipIndex,tips.length)
+        if((tipIndex + tipBatchSize) > tipLength){
+            tipSlice = tips.slice(tipIndex,tipLength)
             eventEmitter.emitEvent('tipsCountChanged', [tipLength])
             done = true
         }
