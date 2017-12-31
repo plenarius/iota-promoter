@@ -383,7 +383,7 @@ window.iotaTransactionSpammer = (function(){
         iota.api.isReattachable(inputs,function(error,reattachable){
             if (error){    
                 eventEmitter.emitEvent('state', ['Error occurred while checking transactions'])      
-                setTimeout(checkTransaction,60000,bundle,startTime)   
+                setTimeout(checkTransaction,30000,bundle,startTime)   
                 return
             }
             if (typeof(reattachable) == 'object'){
@@ -411,7 +411,7 @@ window.iotaTransactionSpammer = (function(){
                 eventEmitter.emitEvent('state', [`Transaction confirmed`])
             }
             else{
-                setTimeout(checkTransaction,60000,bundle,startTime)
+                setTimeout(checkTransaction,30000,bundle,startTime)
             }
         })
     }
