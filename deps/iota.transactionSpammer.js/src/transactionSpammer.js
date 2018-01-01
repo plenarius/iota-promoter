@@ -80,6 +80,7 @@ window.iotaTransactionSpammer = (function(){
     let processedCount = 0
     let tooNewCount = 0
     let zeroValueCount = 0
+    let totalTipsCount = 0
     let averageConfirmationDuration = 0 // milliseconds
 
     function getNextErrorCooldown() {
@@ -425,7 +426,6 @@ window.iotaTransactionSpammer = (function(){
 
     function getTipTransactionObjects(){
         var tipSlice
-        var tipLength = tips.length
         var done = false
         // Remove rejected for zero value
         tips = tips.filter( function( el ) {
@@ -435,8 +435,11 @@ window.iotaTransactionSpammer = (function(){
         tips = tips.filter( function( el ) {
           return !unpromotableTips.includes( el );
         } );
-            tipSlice = tips.slice(tipIndex,tipLength)
-            eventEmitter.emitEvent('tipsCountChanged', [tipLength])
+        totalTipsCount = tips.length
+        eventEmitter.emitEvent('tipsCountChanged', [totalTipsCount])
+        if((tipIndex + tipBatchSize) > tips.length){
+            totalTipsCount += tips.length
+            tipSlice = tips.slice(tipIndex,tips.length)
             done = true
         }
         else{
