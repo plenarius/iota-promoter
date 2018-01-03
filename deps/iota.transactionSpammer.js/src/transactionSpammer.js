@@ -63,7 +63,7 @@ window.iotaTransactionSpammer = (function(){
     let depth = 4
     let weight = 14
     let tipBatchSize = 500
-    let promoteTimeThreshold = 10 //minutes
+    let promoteTimeThreshold = 30 //minutes
     let spamSeed = generateSeed()
     let tipsHashes
     let tipTransactions
