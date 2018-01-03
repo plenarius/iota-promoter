@@ -39,8 +39,8 @@ $(function(){
         $('#eventLogContent').prepend(`<div>${new Date().toISOString()}: ${state}</div>`)
     })
 
-    iotaTransactionSpammer.eventEmitter.on('transactionCountChanged', function(transactionCount) {
-        $('#transactionCount')[0].innerText = transactionCount
+    iotaTransactionSpammer.eventEmitter.on('transactionCountChanged', function(promotedCount, reattachedCount) {
+        $('#transactionCount')[0].innerText = promotedCount
     })
 
     iotaTransactionSpammer.eventEmitter.on('confirmationCountChanged', function(confirmationCount) {
@@ -59,14 +59,23 @@ $(function(){
         $('#processedCount')[0].innerText = processedCount
     })
 
-    iotaTransactionSpammer.eventEmitter.on('rejectedCountChanged', function(zeroValueCount,tooNewCount,unpromotableCount) {
-        $('#rejectedCount')[0].innerText = zeroValueCount + "/" + tooNewCount + "/" + unpromotableCount
+    iotaTransactionSpammer.eventEmitter.on('rejectedCountChanged', function(zeroValueCount,tooNewCount,unpromotableCount,unreattachableCount,tooBigCount) {
+        $('#rejectedCount')[0].innerText = zeroValueCount + "/" + tooNewCount + "/" + unreattachableCount + "/" + tooBigCount
     })
 
     iotaTransactionSpammer.eventEmitter.on('transactionCompleted', function(success) {
         const thetangleorgBaseURL = 'https://thetangle.org/transaction/'
         const thetangleorgURL = `${thetangleorgBaseURL}${success}`
-        $('#eventLogContent').prepend(`<div>${new Date().toISOString()}: New promotion created on: <a href="${thetangleorgURL}">${thetangleorgURL}</a> </div>`)
+        $('#eventLogContent').prepend(`<div>${new Date().toISOString()}: New promotion/reattach created: <a href="${thetangleorgURL}" target="_new">${thetangleorgURL}</a> </div>`)
+        
+        const iotasearchBaseURL = 'https://iotasear.ch/transaction/'
+        const iotaSearchURL = `${iotasearchBaseURL}${success}`
+        $('#eventLogContent').prepend(`<div>${new Date().toISOString()}: New promotion/reattach created: <a href="${iotaSearchURL}" target="_new">${iotaSearchURL}</a> </div>`)
+        
+        const iotatanglewebsiteBaseURL = 'http://iotatangle.website/transaction/'
+        const iotatanglewebsiteURL = `${iotatanglewebsiteBaseURL}${success}`
+        $('#eventLogContent').prepend(`<div>${new Date().toISOString()}: New promotion/reattach created: <a href="${iotatanglewebsiteURL}" target="_new">${iotatanglewebsiteURL}</a> </div>`)
+    
     })
 
     $('#loadBalanceCheckbox').prop('checked', iotaTransactionSpammer.options().isLoadBalancing)
