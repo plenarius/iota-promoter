@@ -471,9 +471,7 @@ window.iotaTransactionSpammer = (function(){
             if(error){
                 eventEmitter.emitEvent('state', ['Error getting tips.'])
                 if(error == 'Error: Invalid Response: '){
-                  eventEmitter.emitEvent('state', [`Error 1 ${httpsProviders}.`])
                   httpsProviders = httpsProviders.filter(e => e !== _currentProvider);
-                  eventEmitter.emitEvent('state', [`Error 2 ${httpsProviders}.`])
                   if(httpsProviders.length <= 0) {
                     eventEmitter.emitEvent('state', ['No valid HTTPS servers available.'])
                     return;
