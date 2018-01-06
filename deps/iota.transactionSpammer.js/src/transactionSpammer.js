@@ -48,11 +48,15 @@ window.iotaTransactionSpammer = (function(){
         "https://durian.iotasalad.org:14265/",
         "https://peanut.iotasalad.org:14265/",
         "https://potato.iotasalad.org:14265/",
-        "https://potato.iotasalad.org:14265/",
         "https://tuna.iotasalad.org:14265/",
         "https://turnip.iotasalad.org:14265/",
         "https://iri2-api.iota.fm:443/",
         "https://iri3-api.iota.fm:443/",
+        "https://node1.iotaner.org:443",
+        "https://nelson1-api.iota.fm:443",
+        "https://node1.iotaner.org:443",
+        "https://node.iota-community.org:443",
+        "https://node.neffware.com:443",
     ]
 
     let validProviders = getValidProviders()
