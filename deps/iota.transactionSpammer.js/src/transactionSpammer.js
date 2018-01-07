@@ -276,6 +276,10 @@ window.iotaTransactionSpammer = (function(){
         eventEmitter.emitEvent('processedCountChanged', [processedCount]) 
         while(value < 1 || transactionAge < promoteTimeThreshold){
             processedCount++
+            if(tipTransactions.length == 0){
+                populateTips()
+                return
+            }
             tip = tipTransactions.pop()
             value = tip.value
             if (value < 1) {
@@ -293,9 +297,6 @@ window.iotaTransactionSpammer = (function(){
             }
 
             transactionAge = round((Date.now() - timestamp)/(60*1000),1)
-        }
-        if(tipTransactions.length <= 10){
-            return changeProviderAndSync()
         }
         eventEmitter.emitEvent('processedCountChanged', [processedCount]) 
         iota.api.getBundle(tip.hash,(error,bundle) => {
