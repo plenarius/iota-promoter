@@ -126,7 +126,7 @@
         <div class="col-md-8 col-md-offset-2">
             <h1>About the Author</h1>
             <h2>
-                This project was originally created by Peter Ryszkiewicz (<a href="https://github.com/pRizz" target="_blank">pRizz@GitHub</a>), software engineer in Chicago, IL and modified by (<a href="https://github.com/normpad/" target="_blank">normpad@GitHub</a>) and then updated for promotion by (<a href="https://github.com/plenarius/" target="_blank">plenarius@GitHub</a>).
+                This project was originally created by Peter Ryszkiewicz (<a href="https://github.com/pRizz" target="_blank">pRizz@GitHub</a>), software engineer in Chicago, IL and modified by (<a href="https://github.com/normpad/">normpad@GitHub</a>) and then updated for promotion by (<a href="https://github.com/plenarius/" target="_blank">plenarius@GitHub</a>).
             </h2>
         </div>
     </div>
@@ -200,11 +200,11 @@ SOFTWARE.
                             Remote Proof of Work. If your custom host or the hosts you have hardcoded in your host list all allow Proof-of-Work and you want to offload it there, check this box.
                         </label>
                     </div>
-                    <h3>
-                        Select a host
-                    </h3>
-                    <select id="hostSelection" ng-model="selectedHost" ng-options="host for host in hostList">
-                    </select> <!-- TODO, make this dropdown use Bootstrap's css -->
+                    <div class="form-group">
+                      <h3>Select a Host</h3>
+                      <select class="form-control" id="hostSelection" ng-model="selectedHost" ng-options="host for host in hostList">
+                      </select>
+                    </div>
                     <h1> </h1>
                     <h3>
                         Custom Host
